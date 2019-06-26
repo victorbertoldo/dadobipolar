@@ -1,0 +1,36 @@
+﻿/**************************************************************************************
+Author: Victor Bertoldo
+blog: dadobipolar.tech
+
+Este script faz o Include de todos os arquivos do diretório apontado, visto que usar 
+padrões como *.* no final do include (Ex.:"$(Include=[lib://QVS (bi_srv.qlik)/Scripts/*.*);")
+não funcionam ao executar o Script.
+
+É necessario haver uma conexão Mapeada no script, para que o Include funcione.
+
+**************************************************************************************/
+Files_:
+Load Distinct
+    FileBaseName() as NomeArq,
+    FileExtension() AS  Extensao
+from [lib://QVS (bi_srv.qlik)/Scripts/*.*];
+
+NoConcatenate 
+Files:
+Load
+	RowNo() AS id,
+    NomeArq&'.'&Extensao as NomeArq
+Resident Files_;
+
+Drop Table Files_;
+
+let idArqF = Peek('id',-1,'Files');
+
+for i = 0 to $(idArqF)
+	Let vArqF = Peek('NomeArq',$(i),'Files');
+    
+    $(Include=[lib://QVS (bi_srv.qlik)/Scripts/$(vArqF)]); 
+	    trace Arquivo adicionado: $(vArqF);
+next i;
+
+drop Table Files;
