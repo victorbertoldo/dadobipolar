@@ -1,0 +1,30 @@
+﻿SUB CriaCalendario(vCampoData,vNomeCalendario,vPrefixoCalendario,vCampoChave)
+  
+  LET vNomeCalendario = If(Len('$(vNomeCalendario)')=0,'Calendario','$(vNomeCalendario)');  
+  LET vPrefixoCalendario = If(Len('$(vPrefixoCalendario)')=0,'','$(vPrefixoCalendario)'); 
+  LET vCampoChave = PurgeChar(vCampoChave,'"[]');   
+  
+  
+  [$(vNomeCalendario)]:  
+	LOAD  
+        Distinct 
+        Data_ 																		as [$(vCampoChave)],
+        Year(Data_) 																as [$(vPrefixoCalendario)Ano],
+        Month(Data_) 																as [$(vPrefixoCalendario)Mes],
+  //      Ceil (num (month (Data_))/3)&'º Trimestre'  								as [$(vPrefixoCalendario)trimestre],
+        Day(Data_) 																	as [$(vPrefixoCalendario)Dia],
+        MonthName(Date(Data_)) 										as [$(vPrefixoCalendario)MesAno];  
+ 	LOAD 
+ 		Date(_DataInicio+(Iterno()-1),'$(DateFormat)' ) 							as Data_  
+    WHILE (_DataInicio+(Iterno()-1)<=_DataFim);  
+	LOAD  
+            Floor(Min(Fieldvalue('$(vCampoData)',RecNo()))) 						as _DataInicio,  
+            Floor(Max(Fieldvalue('$(vCampoData)',RecNo()))) 						as _DataFim  
+    AUTOGENERATE FieldValueCount('$(vCampoData)');  
+  
+ENDSUB; 
+
+
+
+
+Call CriaCalendario('%ChaveData','Calendario','','%ChaveData');
