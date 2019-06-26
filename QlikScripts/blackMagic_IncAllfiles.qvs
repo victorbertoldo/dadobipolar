@@ -8,7 +8,14 @@ não funcionam ao executar o Script.
 
 É necessario haver uma conexão Mapeada no script, para que o Include funcione.
 
+Dica: Em projetos onde existem vários e vários scripts para fazer includes e devs trabalham 
+de forma paralela nos mesmos projetos, é muito importante o uso de pastas separadas como se fossem 
+uma espécie de branch, para que scripts não finalizados não entrem em cargas que possam ocorrer no meio do dia.
+Pois ao adcionar este trecho de script em seu App, ele irá adicionar todos os .qvs da pasta e isso pode ocasionar
+em falhas na carga de dados.
+
 **************************************************************************************/
+
 Files_:
 Load Distinct
     FileBaseName() as NomeArq,
