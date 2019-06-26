@@ -1,6 +1,10 @@
 gdgdgdgdgererere
+<<<<<<< HEAD
 retes
 testee
 fdfd
   
   testee
+=======
+retes
+>>>>>>> dev
