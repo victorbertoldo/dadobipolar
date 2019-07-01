@@ -1,4 +1,10 @@
-﻿SUB CriaCalendario(vCampoData,vNomeCalendario,vPrefixoCalendario,vCampoChave)
+﻿/* Exemplo de calendário utilizando uma Sub rotina. A idéia foi tirada do blog do Nicolett
+
+https://blogdonicolett.com.br/2015/03/16/funcao-para-criar-calendario-utilizando-data-existente-no-modelo/
+
+*/
+
+SUB CriaCalendario(vCampoData,vNomeCalendario,vPrefixoCalendario,vCampoChave)
   
   LET vNomeCalendario = If(Len('$(vNomeCalendario)')=0,'Calendario','$(vNomeCalendario)');  
   LET vPrefixoCalendario = If(Len('$(vPrefixoCalendario)')=0,'','$(vPrefixoCalendario)'); 

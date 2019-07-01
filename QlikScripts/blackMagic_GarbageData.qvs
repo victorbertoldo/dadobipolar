@@ -1,5 +1,5 @@
 ﻿/**************************************************************************************
-Author: Victor Bertoldo
+Copyright (c) 2019 Victor Bertoldo
 blog: dadobipolar.tech
 
 Este script limpa da memória, dados que não serão mais usados.
