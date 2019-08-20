@@ -6,8 +6,8 @@ Este script importa o qvf para o repositório git configurado
 Criar a variável de ambiente de sistema: qlikPath com o valor %userprofile%\Documents\Qlik\Sense\Apps\
 #>
 $path       = $env:qlikPath
-$app        = "Zabbix.qvf" # Digite o nome do App
-$repo       =  "D:\dadobipolar\Zabbix\" #Coloque o caminho destino, onde o repositório local foi configurado.
+$app        = "MapaBr.qvf" # Digite o nome do App
+$repo       =  "D:\dadobipolar\Mapa\" #Coloque o caminho destino, onde o repositório local foi configurado.
 
 
 
