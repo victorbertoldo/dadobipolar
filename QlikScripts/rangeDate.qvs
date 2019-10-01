@@ -1,0 +1,33 @@
+﻿data:
+load * Inline [
+data, dia
+01/02/2019, 1
+02/02/2019, 2
+03/02/2019, 3
+04/02/2019, 4
+05/02/2019, 5
+];
+
+NoConcatenate
+tb:
+load data,
+      dia as [1a2]
+Resident data
+Where dia >= 1 and dia <= 2;
+Concatenate
+load data,
+      '' as [1a2]
+Resident data;
+
+
+for i = 3 to 5
+left join(tb)
+load  data,
+      dia as [1a$(i)]
+Resident data
+Where dia >= 1 and dia <= $(i);
+
+
+next i;
+
+drop Table data;
