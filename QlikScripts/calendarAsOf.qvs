@@ -1,0 +1,108 @@
+﻿/*
+
+Calendário cedido por Rafael Santos
+
+*/
+
+
+
+TempData:
+LOAD Max (SUADATA) AS DataMaxF,
+	 Min (SUADATA) AS DataMinF
+RESIDENT DETALHES_NF3;
+
+//--------------------------------------------------------------------
+
+LET varMinDate = Peek('DataMinF',0,'TempData');
+LET varMaxDate = Peek('DataMaxF',0,'TempData');
+
+//--------------------------------------------------------------------	
+
+TempCalendar: 
+LOAD
+	$(varMinDate) + rowno() - 1 		AS DateNumber,
+	date ($(varMinDate) + rowno() - 1)  AS TempDate
+AUTOGENERATE
+	$(varMaxDate) - $(varMinDate) + 1;
+
+
+//--------------------------------------------------------------------
+
+Calendario:	
+LOAD
+	Num(TempDate) AS SUADATA,
+	Date(TempDate, 'DDMMYYYY') AS Data2,
+	Date(TempDate) AS Data,
+	Week (TempDate) AS Semana,
+	Week (TempDate)&' '&WeekDay(TempDate) AS SemanaDia,
+	Year (TempDate) AS ANO,
+	Month (TempDate) AS MES,
+	Day (TempDate) AS DIA,
+	Weekday (TempDate) AS DiaDaSemana,
+	Week(TempDate)&Num(WeekDay(TempDate)) AS SemDiaNum,
+	WeekYear (TempDate)&Week(TempDate)&Num(WeekDay(TempDate)) AS AnoSemDiaNum,
+	Date( Monthstart (TempDate), 'MMM-YYYY') AS MesAno,
+	MonthName(TempDate) AS MesAno2,
+	Date( Monthstart (TempDate), 'YYYYMM') AS ANO_MES,
+	Week (TempDate) & '-' & WeekYear (TempDate) AS SemanaAno,
+	IF(MONTH(TempDate)< MONTH($(varToday)),1,0) AS YTM_0_Flag,
+    IF($(varToday)- Num(TempDate) < 31,1,0) AS Flag_30_Dias,
+    IF($(varToday)- Num(TempDate) < 8,1,0) 	AS Flag_7_Dias,
+    IF($(vNumSem) - Week(TempDate) < 2  AND $(vNumSem) - Week(TempDate) >= 0 ,1,0) AS Flag_2Sem,
+    IF($(vNumSem) - Week(TempDate) < 9  AND $(vNumSem) - Week(TempDate) >= 0 ,1,0) AS Flag_9Sem,    
+    
+    IF($(varStartS0) = Num(WeekStart(TempDate)),1,0)  AS Flag_S0,
+    IF($(varStartS1) = Num(WeekStart(TempDate)),1,0)  AS Flag_S1,
+    IF($(varStartS2) = Num(WeekStart(TempDate)),1,0)  AS Flag_S2,
+    IF($(varStartS3) = Num(WeekStart(TempDate)),1,0)  AS Flag_S3,
+    IF($(varStartS4) = Num(WeekStart(TempDate)),1,0)  AS Flag_S4,
+	//    
+	InYear (TempDate, $(varToday),0 )*-1 AS Ano_0_Flag,
+	InYear (TempDate, $(varToday),-1 )*-1 AS Ano_1_Flag,
+	InYear (TempDate, $(varToday),-2 )*-1 AS Ano_2_Flag,
+	
+	// Mêses terminados
+    IF( Year(TempDate)= Year($(varToday)) ,1,0)   AS Mes_0_Flag,
+    IF( Year(TempDate)= Year($(varToday))-1 ,1,0) AS Mes_1_Flag,
+    IF( Year(TempDate)= Year($(varToday))-2 ,1,0) AS Mes_2_Flag,
+    IF( Year(TempDate)= Year($(varToday))-3 ,1,0) AS Mes_3_Flag,	
+	
+	// Mêses terminados
+    IF( Year(TempDate)=Year($(varToday)) AND Month(TempDate)< Month($(varToday)),1,0) AS MesFechado_0_Flag,
+    IF( Year(TempDate)= Year($(varToday))-1 ,1,0) AS MesFechado_1_Flag,
+    IF( Year(TempDate)= Year($(varToday))-2 ,1,0) AS MesFechado_2_Flag,	
+	
+	// YearTo Day
+	Inyeartodate(TempDate, $(varToday), 0)*-1 					AS YTD_0_Flag,
+	Inyeartodate (TempDate, $(varToday), -1)*-1 				AS YTD_1_Flag,
+	Inyeartodate (TempDate, $(varToday), -2)*-1 				AS YTD_2_Flag,
+	Inyeartodate (TempDate, $(varToday), -3)*-1 				AS YTD_3_Flag,	
+	Inyeartodate (TempDate, $(varToday), -4)*-1 				AS YTD_4_Flag,
+	Inyeartodate (TempDate, $(varToday), -5)*-1 				AS YTD_5_Flag,	
+	Inyeartodate (TempDate, $(varToday), -6)*-1 				AS YTD_6_Flag,		
+	// Month To Day
+	InMonthToDate ( TempDate, $(varToday), 0)*-1 				AS MTD_0_Flag,
+	InMonthToDate ( TempDate, $(varToday), -12)*-1 				AS MTD_1_Flag,
+	InMonthToDate ( TempDate, $(varToday), -24)*-1 				AS MTD_2_Flag,
+	InMonthToDate ( TempDate, $(varToday), -36)*-1 				AS MTD_3_Flag,	
+	InMonthToDate ( TempDate, $(varToday), -48)*-1 				AS MTD_4_Flag,
+	InMonthToDate ( TempDate, $(varToday), -60)*-1 				AS MTD_5_Flag,	
+	InMonthToDate ( TempDate, $(varToday), -72)*-1 				AS MTD_6_Flag,		
+	// Ultimos 12 meses
+	InYear (TempDate,$(varToday), -1, $(vMesNum))*-1 			AS Ult12M_0_Flag,
+	InYear (TempDate,$(varToday), -2, $(vMesNum))*-1 			AS Ult12M_1_Flag,
+	InYear (TempDate,$(varToday), -3, $(vMesNum))*-1 			AS Ult12M_2_Flag,
+	InYear (TempDate,$(varToday), -4, $(vMesNum))*-1 			AS Ult12M_3_Flag,
+	InYear (TempDate,$(varToday), -5, $(vMesNum))*-1 			AS Ult12M_4_Flag,
+	InYear (TempDate,$(varToday), -6, $(vMesNum))*-1 			AS Ult12M_5_Flag,
+	InYear (TempDate,$(varToday), -7, $(vMesNum))*-1 			AS Ult12M_6_Flag
+	,'Semestre ' & ceil(num(month(TempDate),00)/6) 				AS Semestre	
+	,'Q' 	 & Ceil(num(Month(TempDate),00)/3) 					AS Quarter	
+	,'Trim' 	 & Ceil(num(Month(TempDate),00)/3) 				AS Trimestre_
+	,'B' 	 	 & Ceil(num(Month(TempDate),00)/2) 				AS Bimestre_		
+	,'Quad' 	 	 & Ceil(num(Month(TempDate),00)/4) 				AS Quadr_		
+Resident TempCalendar
+Order by TempDate ASC;
+
+
+DROP TABLE TempCalendar, TempData;
