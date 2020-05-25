@@ -1,0 +1,45 @@
+﻿let vDtIni = '01/01/2020';
+let vDtIni = DATE(DATE#('$(vDtIni)'));
+
+TRACE vDtIni: $(vDtIni);
+
+let vDtFim = Today();
+
+TRACE vDtFim: $(vDtFim);
+
+LET vTimeI = '00:00:00';
+LET vTimeI = TIME#('$(vTimeI)');
+
+LET vTimeF = '23:59:59';
+LET vTimeF = TIME#('$(vTimeF)');
+
+TEMPO_DATAS:
+LOAD
+	DATA,
+    RowNo() AS ID;
+LOAD 
+	$(vDtIni) + Iterno()-1 AS ID,
+    Date('$(vDtIni)' + IterNo() - 1) as DATA
+    AutoGenerate 1 While '$(vDtIni)' + IterNo() -1 <= '$(vDtFim)';
+    
+join(TEMPO_DATAS)
+LOAD
+	ceil((RecNo() * RAND())/146)+1 AS ID,
+	HORA;
+LOAD
+  time(now() + rand()) as HORA
+AutoGenerate 10000;    
+
+NoConcatenate
+
+TEMPO_FIM:
+LOAD *, INTERVAL(INTERVAL(FIM_DIA-INI_DIA) - '15:00:00') AS HORA_TRABALHADA;
+LOAD *, DayStart(TEMPO) AS INI_DIA, DayEnd(TEMPO) AS FIM_DIA;
+LOAD
+	*,
+    IF(WildMatch(WeekDay(DATA),'dom','sab'),0,1) as FLAG_DIA_UTIL,
+    Timestamp#(DATA & ' ' & IF(IsNull(HORA),'00:00:00',HORA)) AS TEMPO,
+    NetWorkDays('$(vDtIni)','$(vDtFim)' ) AS DIASUTEIS
+RESIDENT TEMPO_DATAS;    
+
+DROP TABLE TEMPO_DATAS;
