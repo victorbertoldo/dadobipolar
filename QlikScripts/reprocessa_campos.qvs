@@ -1,0 +1,26 @@
+﻿FILTER_API:
+LOAD
+    UPPER(API) AS API
+FROM [$(vDim)/FILTRO_API.QVD](QVD)
+WHERE FLAG_ARQ_UND = 1;   
+
+FOR EACH vDir in FieldValueList('API')
+
+    FOR Each File in FileList('[lib://QVD (qlik-sense_qliksense)/<caminho>/$(vDir)/*]')
+
+        Files:
+        LOAD
+        	<add apenas os campos necessarios>
+        FROM [$(File)](QVD);
+        
+        LET Store = Replace('$(File)','/EXTRACAO/','/EXTRACAO_/');
+        Trace Store: $(Store);
+        
+        STORE Files INTO [$(Store)](qvd);
+        Drop Table Files;
+
+    NEXT File;
+    
+NEXT vDir;    
+	
+    
