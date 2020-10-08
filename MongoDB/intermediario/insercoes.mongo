@@ -1,0 +1,9 @@
+/*
+Tipos de inserções:
+
+db.collection.insert(<documento>) -----> Faz a inserção de um novo documento
+db.collection.save(<documento>)   -----> Caso o _id já exista, usando o save o mongo entenderá como atualização dos dados do documento cujo o ObjectID seja o mesmo, caso contrário funcionará como insert
+db.collection.update(<query>, <updade>, {upsert: true}) -----> usando o argumento upsert: true, caso o filtro usado na query não retorne nenhum valor, um novo documento será inserido.
+
+*/
+
