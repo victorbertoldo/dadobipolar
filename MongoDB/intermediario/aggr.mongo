@@ -1,0 +1,43 @@
+db.clientes.aggregate([
+    {$match: {sexo: "F"}},
+    { $group: {
+        _id: null,
+        count: {$sum: 1 }
+        }
+    },
+    {
+          $project: {
+        _id : false,
+         sexo : "$clientes.sexo",
+        count : "$count"
+    }
+    }
+    ]);
+    
+    
+db.clientes.aggregate([
+   // {$match: {sexo: "F"}},
+    {
+     $bucket: {
+         groupBy: "$sexo",
+         boundaries: ["F","M"],
+         default: "M-F",
+         output: {
+              "count": { $sum: 1 },
+              "sexo" : { $push: "$sexo" }
+         }
+        }
+    },
+    {
+        $project: {
+        _id : false,
+        sexo : "$sexo",
+        count : "$count"
+    }
+    }
+    ]);
+    //{sexo: 'F'}, {$project: {sexo: "$sexo", count: "$count"}}])
+    
+    
+    
+    db.clientes.find({"endereco.Localizacao.0.UF": "GO"})

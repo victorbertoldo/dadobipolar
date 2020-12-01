@@ -11,5 +11,5 @@ $var = Get-ChildItem -Path "C:\Users\victor.bertoldo\Documents\Qlik\Sense\Log\Sc
 O diretório comentado é um mapeamento da pasta de logs do servidor
 $var = Get-ChildItem -Path "S:\" |  Sort-Object -Property CreationTime | Select-Object -Last 1 
 #>
-$var = Get-ChildItem -Path "S:\" |  Sort-Object -Property CreationTime | Select-Object -Last 1 
+$var = Get-ChildItem -Path "S:\*9801253d-09ca-41be-8d23-1df92cb32d8f*" |  Sort-Object -Property CreationTime | Select-Object -Last 1 
     get-content $var.FullName -Wait
