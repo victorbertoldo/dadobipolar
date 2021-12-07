@@ -1,0 +1,53 @@
+// usando tipo double
+var valorDouble = 1100.57;
+valorDouble;
+
+// tipo string
+
+use dbtipos
+db.collectionString.insert({Registro:"Tipo String no Mongo"})
+
+db.collectionString.find()
+
+// Tipo Object
+var localizacao = {
+    endereco: "av goias",
+    numero: 25,
+    complemento: "qd 11, sala 7"
+}
+// A localizacao é o objeto, ou seja um subdocumento
+db.collectionObject.insert({
+    empresa: "Data Analytics co",
+    ramo:    "Analise de Dados",
+    local: localizacao})
+    
+db.collectionObject.find()   
+
+// Tipo array
+var cidadesAustralia = [
+        "Sydney",
+        "Melbourne",
+        "Brisbane"
+    ]
+    
+var cidadesUS = [
+        "Chicago",
+        "Los Angeles",
+        "Seattle"
+    ]
+
+var cidadesMexico = [
+        "Guadalajara",
+        "Tijuana",
+        "Cancun"
+    ]
+
+db.collectionArrays.insert(
+    {
+        cidades1 : cidadesAustralia,
+        cidades2 : cidadesUS,
+        cidades3 : cidadesMexico
+        
+    })
+    
+db.collectionArrays.find()    

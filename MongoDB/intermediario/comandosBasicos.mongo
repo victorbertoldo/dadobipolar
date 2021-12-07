@@ -1,0 +1,23 @@
+﻿// Mostrar bancos de dados
+show dbs
+
+// Selecionar o bancos 
+use mongodba
+
+// Criar uma collection
+db.createCollection('postagens')
+
+// Eliminar o banco de dados
+// O db não é declarado no comando, é necessario declarar o use antes da operação
+use mongodba
+db.dropDatabase();
+
+// Exibir collections
+show collections
+
+// Remover todos os documentos da collection
+// O {} representa uma consulta vazia, como se fosse um delete sem where
+db.nomedacollection.remove({});
+
+// Dropar uma collection
+db.nomedacollection.drop();

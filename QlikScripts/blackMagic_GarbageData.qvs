@@ -1,0 +1,17 @@
+﻿/**************************************************************************************
+Copyright (c) 2019 Victor Bertoldo
+blog: dadobipolar.tech
+
+Este script limpa da memória, dados que não serão mais usados.
+Deve-se usar após vários stores em cascata.
+
+**************************************************************************************/
+
+let noTb = NoOfTables();
+
+for i=1 to $(noTb)
+
+    let tb = TableName(0);
+    drop table [$(tb)];
+
+next;

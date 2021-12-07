@@ -1,0 +1,47 @@
+/*
+db.collection.find({<query>, <projection>}) ----> A projeção é uma forma de selecionar os campos na consulta
+
+*/
+// Mesma função do 'SELECT * FROM'
+
+db.postagens.find();
+
+// Limitando o numero de registros na consulta
+db.postagens.find().limit(2);
+
+// Ordenação dos resultados
+db.postagens.find().sort({titulo: 1});
+
+// Limitando o numero de registros de forma ordenada
+db.postagens.find().sort({titulo: 1}).limit(2);
+
+// Consulta com projeção (Seleção de atributos para retornar na consulta)
+db.postagens.find({}, {titulo: true});
+
+// Por padrão o mongodb sempre irá retornar o _id, para não exibi-lo na consulta é necessário explicitar 
+db.postagens.find({}, {titulo: true, _id: false}).sort({titulo: 1})
+
+// Consulta usando o operador $in
+db.estoque.find({ categoria: { $in: ['roupas', 'utensilios domésticos'] } } ).pretty();
+
+// Consulta especificando condição 'AND' e operador "Menor que"
+db.estoque.find({ categoria: 'roupas', "itensestoque.qtde": { $lt: 10 } } ).pretty();
+
+// Contar registros
+db.estoque.find({}).count();
+
+// Consulta especificando condição 'OR'
+db.estoque.find({ $or: [ { "itensestoque.qtde": { $lt: 10 } }, {"itensestoque.qtde": { $gt: 20 } } ] } );
+
+// Consulta especificando condição 'OR' e 'AND'
+db.estoque.find({   categoria: 'roupas',
+                    $or: [  
+                            {
+                            "itensestoque.qtde": { $lt: 10}
+                            },
+                            {
+                            "itensestoque.qtde": { $gt: 20 } 
+                            }
+                    ]
+});
+

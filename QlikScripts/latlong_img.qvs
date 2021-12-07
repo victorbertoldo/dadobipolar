@@ -1,0 +1,13 @@
+﻿PONTO_LOCAL:
+LOAD * INLINE [
+processtask,                y,      x
+Registrar Solicitação,      1260,   170
+Reformular Solicitação,     1260,   716
+Avaliar Solução,            1100,   928
+Qualificar Solicitação,      925,   425
+Aprova Desenvolvimento,      770,   735
+Avalia Solução,              690,  1035
+Gestor Aprovador,            530,   434
+Analisar Tarefa,             330,   416
+Solucionar Incidentes,       160,   700
+];

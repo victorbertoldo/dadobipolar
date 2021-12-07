@@ -1,0 +1,21 @@
+﻿Ranges:
+Load 
+	[Date Range],
+	Date(Evaluate(RangeStart)) 	AS [Range Start],
+	Date(Evaluate(RangeEnd)) 	AS [Range End]
+	;
+LOAD * INLINE [
+	Date Range|RangeStart|RangeEnd
+	Last Week|WeekStart(vToday,-1)|WeekEnd(vToday,-1)
+	Last Month|MonthStart(vToday,-1)|MonthEnd(vToday,-1)
+	Last Quarter|QuarterStart(vToday,-1)|QuarterEnd(vToday,-1)
+	Last Year|YearStart(vToday,-1)|YearEnd(vToday,-1)
+	Month-To-Date|MonthStart(vToday)|vToday
+	Year-To-Date|YearStart(vToday)|vToday]
+(ansi, txt, delimiter is '|', embedded labels)
+;
+ 
+
+Left Join (Ranges)
+IntervalMatch ([%DateKey])
+Load distinct [Range Start], [Range End] resident Ranges;

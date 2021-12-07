@@ -1,0 +1,51 @@
+﻿
+/*
+O objetivo deste script é fazer o parser de um campo JSON para o formato tabular.
+
+Autor: Victor Bertoldo
+Blog: dadobipolar.tech
+
+
+*/
+
+
+
+TABELA:
+LOAD * INLINE [
+ID, NOME, 		DADOS
+1,	JÃO,  		'{ "SEXO" : "M",  "IDADE" : 35}'
+2,	ZÉ,	  		'{ "SEXO" : "M",  "IDADE" : 28}'
+3,	TIÃO, 		'{ "SEXO" : "M",  "IDADE" : 32}'
+4,	CARLOTA,	'{ "SEXO" : "F",  "IDADE" : 27}'
+5,	JERTRUDES,	'{ "SEXO" : "F",  "IDADE" : 36}'
+6,	MAROCAS,	'{ "SEXO" : "F",  "IDADE" : 31}'
+];
+
+TBJSON:
+LOAD 
+	Replace(DADOS,'{ "SEXO" :','{ "ID" : ' & '"' & ID &'"' &',' & CHR(10) & '"SEXO" :') as CAMPO_JSON
+RESIDENT TABELA;    
+
+Map:
+MAPPING
+LOAD TEXT(ID) AS ID,
+	 NOME
+Resident TABELA;
+
+DROP Table TABELA;
+
+NORM_JSON:
+LOAD * From_Field(TBJSON,CAMPO_JSON)(json, utf8);
+
+DROP Table TBJSON;
+
+NoConcatenate
+TB_FIM:
+LOAD
+	ID,
+    SEXO,
+    IDADE,
+    ApplyMap('Map',ID) AS NOME
+RESIDENT NORM_JSON;
+
+DROP Table NORM_JSON;
